@@ -1,0 +1,161 @@
+#container {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px dotted green;
+    height: 90vh;
+}
+.scoreboard {
+    display: flex;
+    align-items: center;
+}
+#score {
+    font-size: 2em;
+    margin: 0em 1em;
+}
+#back-grid {
+    display: grid;
+    /* min-width: 20rem;
+    min-height: 20rem; */
+    width: 22rem;
+    height: 22rem;
+    grid-template-columns: repeat(4, 5rem);
+    grid-template-rows: repeat(4, 5rem);
+    grid-template: "A B C D"
+                    "E F G H"
+                    "I J K L"
+                    "M N O P";
+    background: #fff;
+    border: 1px dotted aquamarine;
+    column-gap: 0.3rem;
+    row-gap: 0.3rem;
+    padding: 0.7rem;
+}
+.grid-cell-back, .grid-cell {
+    display: flex;
+    place-self: center;
+    background: #eee;
+    align-items: center;
+    justify-content: center;
+    height: 5rem;
+    width: 5rem;
+    /* border: 1px dotted #fff; */
+    border-radius: 0.5rem;
+}
+.grid-cell {
+    background: coral;
+    text-align: center;
+    border-bottom: 3px solid rgba(96, 96, 96, 0.5);
+    color: white;
+    font-size: 1.5em;
+}
+.c-2 {
+    background: skyblue;
+}
+.c-4 {
+    background: deepskyblue;
+}
+.c-8 {
+    background: steelblue;
+}
+.c-16 {
+    background: blueviolet;
+}
+.c-32 {
+    background: yellowgreen;
+}
+.c-64 {
+    background: yellow;
+}
+.c-128 {
+    background: orange;
+}
+.c-256 {
+    background: goldenrod;
+}
+.c-512 {
+    background: springgreen;
+}
+.c-1024 {
+    background: seagreen;
+}
+.c-2048 {
+    background: red;
+}
+#A {
+    grid-area: A;
+}
+#B {
+    grid-area: B;
+}
+#C {
+    grid-area: C;
+}
+#D {
+    grid-area: D;
+}
+#E {
+    grid-area: E;
+}
+#F {
+    grid-area: F;
+}
+#G {
+    grid-area: G;
+}
+#H {
+    grid-area: H;
+}
+#I {
+    grid-area: I;
+}
+#J {
+    grid-area: J;
+}
+#K {
+    grid-area: K;
+}
+#L {
+    grid-area: L;
+}
+#M {
+    grid-area: M;
+}
+#N {
+    grid-area: N;
+}
+#O {
+    grid-area: O;
+}
+#P {
+    grid-area: P;
+}
+.x {
+    background: green;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid lightblue;
+}
+#num-grid {
+    display: flex;
+    background: #fff;
+    border: 1px dotted aquamarine;
+    flex-direction: column;
+    padding: 0.7rem;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.num {
+    min-width: 5em;
+    min-height: 5em;
+    /* width: 4rem;
+    height: 4rem; */
+    /* border: 1px solid red; */
+    background: #eee;
+    border-radius: 0.5rem;
+    margin: 0.3rem;
+}
