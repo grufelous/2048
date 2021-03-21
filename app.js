@@ -90,6 +90,7 @@
         keyHandler: function(e) {
             console.log(e.key)
             console.log(`Called on ${e.target}`)
+            let nextGrid = model.emptyGrid()
             switch(e.key) {
                 case 'ArrowLeft':
                     nextGrid = octopus.moveLeft(model.gridGS.grid)
