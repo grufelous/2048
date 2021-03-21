@@ -90,9 +90,10 @@
         keyHandler: function(e) {
             console.log(e.key)
             console.log(`Called on ${e.target}`)
+            let nextGrid = model.emptyGrid()
             switch(e.key) {
                 case 'ArrowLeft':
-                    let nextGrid = octopus.moveLeft(model.gridGS.grid)
+                    nextGrid = octopus.moveLeft(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
                     view.renderGrid()
