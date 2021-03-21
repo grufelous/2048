@@ -1,3 +1,11 @@
+interface ArrowMovementInterface {
+    (grid: TGrid) : TGrid
+}
+interface IGrid {
+    // ? Can we use it for Arrays without any issues?
+    [index: number] : Array<number>
+}
+type TGrid = Array<Array<number>>
 (function() {
     let model = {
         gridStore: [
@@ -7,26 +15,26 @@
             [0, 0, 0, 0],
         ],
         score: 0,
-        emptyGrid: function() : Array<Array<number>> {
+        emptyGrid: function() : TGrid {
             return [[0, 0, 0, 0],[0, 0, 0, 0],[0, 0, 0, 0],[0, 0, 0, 0],]
         },
         cellValues: [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048],
         gridGS: (function() {
             return {
                 ourGrid: [[0, 0, 0, 0],[0, 0, 0, 0],[0, 0, 0, 0],[0, 0, 0, 0],],
-                get grid() : Array<Array<number>>{
+                get grid() : TGrid {
                     // console.log('Called getter')
                     return this.ourGrid
                 },
-                set grid(newGrid : Array<Array<number>>) {
+                set grid(newGrid : TGrid) {
                     console.log('Called setter to set as: ')
                     console.log(this.ourGrid)
                     this.ourGrid = newGrid
                 }
             }
         })(),
-        transpose: function(grid: Array<Array<number>>) : Array<Array<number>>{
-            let newGrid:Array<Array<number>> = this.emptyGrid()
+        transpose: function(grid: TGrid) : TGrid {
+            let newGrid:TGrid = this.emptyGrid()
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 4; j++) {
                     newGrid[j][i] = grid[i][j]
@@ -34,11 +42,11 @@
             }
             return newGrid
         },
-        reverse: function(grid: Array<Array<number>>) : Array<Array<number>> {
+        reverse: function(grid: TGrid) : TGrid {
             /**
              * TODO: find out the issue in this function
              *  */
-            let reversedGrid:Array<Array<number>> = [...grid]
+            let reversedGrid:TGrid = [...grid]
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 2; j++) {
                     const x = reversedGrid[i][3-j]
@@ -70,7 +78,7 @@
             // console.log('Cleared')
         },
         renderGrid: function() {
-            const grid: Array<Array<number>> = model.gridGS.grid
+            const grid: TGrid = model.gridGS.grid
             console.log('Rendering this: ')
             console.log(grid)
             for(let i = 0; i < 4; i++) {
@@ -90,7 +98,7 @@
         keyHandler: function(e: KeyboardEvent) {
             // console.log(e)
             // console.log(`Called on ${e.target}`)
-            let nextGrid: Array<Array<number>> = model.emptyGrid()
+            let nextGrid: TGrid = model.emptyGrid()
             switch(e.key) {
                 case 'ArrowLeft':
                     nextGrid = octopus.moveLeft(model.gridGS.grid)
@@ -122,8 +130,8 @@
     }
 
     let octopus = {
-        createNumber: function(grid: Array<Array<number>>, newNumber: number=2) : Array<Array<number>>{
-            let emptyPositions: Array<Array<number>> = []
+        createNumber: function(grid: TGrid, newNumber: number=2) : TGrid {
+            let emptyPositions: TGrid = []
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 4; j++) {
                     if(grid[i][j] === 0) {
@@ -139,7 +147,7 @@
             console.log('Resetting grid')
             octopus.clearGrid()
             console.log(model.gridGS.grid)
-            let grid: Array<Array<number>> = model.emptyGrid()
+            let grid: TGrid = model.emptyGrid()
             let nums: Array<number> = []
             for(let i = 0; i < 4; i++) {
                 nums.push(model.cellValues[Math.floor(Math.random()*4)])
@@ -153,8 +161,10 @@
             view.clearDOMGrid()
             model.gridGS.grid = model.emptyGrid()
         },
-        moveLeft: function(grid: Array<Array<number>>) : Array<Array<number>> {
-            let newGrid: Array<Array<number>> = []
+        // ! grid is implicit any in this, how to enforce interface? -> moveLeft: function(grid) : ArrowMovementInterface {
+        moveLeft: function(grid: TGrid) : TGrid {
+
+            let newGrid: TGrid = []
             for(let i = 0; i < 4; i++) {
                 console.log(`For i = ${i}`)
                 let intermediateGridRow: Array<number> = [], gridRow: Array<number> = []
@@ -191,8 +201,8 @@
             console.log(newGrid)
             return newGrid
         },
-        moveLeftExperiment: function(grid: Array<Array<number>>) : Array<Array<number>>{
-            let newGrid: Array<Array<number>> = model.emptyGrid()
+        moveLeftExperiment: function(grid: TGrid) : TGrid {
+            let newGrid: TGrid = model.emptyGrid()
             grid.forEach((row: Array<number>, rowIdx: number) => {
                 let newRow: Array<number> = newGrid[rowIdx]
                 let i: number = 0, j: number = 1, k: number = 0
@@ -232,8 +242,8 @@
             console.log(newGrid)
             return newGrid
         },
-        moveRight: function(grid: Array<Array<number>>) : Array<Array<number>> {
-            let reversedGrid: Array<Array<number>> = [...grid]
+        moveRight: function(grid: TGrid) : TGrid {
+            let reversedGrid: TGrid = [...grid]
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 2; j++) {
                     const x = reversedGrid[i][3-j]
@@ -251,14 +261,14 @@
             }
             return reversedGrid
         },
-        moveUp: function(grid: Array<Array<number>>) : Array<Array<number>> {
-            let transposedGrid: Array<Array<number>> = model.transpose(grid)
+        moveUp: function(grid: TGrid) : TGrid {
+            let transposedGrid: TGrid = model.transpose(grid)
             transposedGrid = this.moveLeft(transposedGrid)
             transposedGrid = model.transpose(transposedGrid)
             return transposedGrid
         },
-        moveDown: function(grid: Array<Array<number>>) : Array<Array<number>> {
-            let transposedGrid: Array<Array<number>> = model.transpose(grid)
+        moveDown: function(grid: TGrid) : TGrid {
+            let transposedGrid: TGrid = model.transpose(grid)
             transposedGrid = this.moveRight(transposedGrid)
             transposedGrid = model.transpose(transposedGrid)
             return transposedGrid
