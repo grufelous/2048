@@ -80,15 +80,15 @@
                         const newGridCell = document.createElement('div');
                         newGridCell.className = `grid-cell c-${grid[i][j]}`;
                         newGridCell.id = `${curId}`;
-                        newGridCell.innerText = grid[i][j];
+                        newGridCell.innerText = grid[i][j].toString();
                         view.backGrid.appendChild(newGridCell);
                     }
                 }
             }
         },
         keyHandler: function (e) {
-            console.log(e.key);
-            console.log(`Called on ${e.target}`);
+            // console.log(e)
+            // console.log(`Called on ${e.target}`)
             let nextGrid = model.emptyGrid();
             switch (e.key) {
                 case 'ArrowLeft':
@@ -119,7 +119,7 @@
         },
     };
     let octopus = {
-        createNumber: function (grid, number = 2) {
+        createNumber: function (grid, newNumber = 2) {
             let emptyPositions = [];
             for (let i = 0; i < 4; i++) {
                 for (let j = 0; j < 4; j++) {
@@ -129,7 +129,7 @@
                 }
             }
             let chosen = Math.floor(Math.random() * emptyPositions.length);
-            grid[emptyPositions[chosen][0]][emptyPositions[chosen][1]] = number;
+            grid[emptyPositions[chosen][0]][emptyPositions[chosen][1]] = newNumber;
             return grid;
         },
         resetGrid: function () {
