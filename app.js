@@ -24,7 +24,16 @@
                     this.ourGrid = newGrid
                 }
             }
-        })()
+        })(),
+        transpose: function(grid) {
+            let newGrid = model.emptyGrid()
+            for(let i = 0; i < 4; i++) {
+                for(let j = 0; j < 4; j++) {
+                    newGrid[j][i] = grid[i][j]
+                }
+            }
+            return newGrid
+        }
     }
 
     let view = {
@@ -71,31 +80,34 @@
                 case 'ArrowLeft':
                     nextGrid = octopus.moveLeft(model.gridGS.grid)
                     octopus.clearGrid()
-                    console.log('Left result: ')
-                    console.log(nextGrid)
+                    // console.log('Left result: ')
+                    // console.log(nextGrid)
                     nextGrid = octopus.createNumber(nextGrid)
                     model.gridGS.grid = nextGrid
-                    console.log('Final result: ')
-                    console.log(nextGrid)
-                    console.log(model.gridGS.grid)
+                    // console.log('Final result: ')
+                    // console.log(nextGrid)
+                    // console.log(model.gridGS.grid)
                     view.renderGrid()
                     break
                 case 'ArrowUp':
-                    // gridStore = moveUp(gridStore)
-                    // clearGrid()
-                    // createNumber(gridStore)
-                    // renderGrid(gridStore)
+                    nextGrid = octopus.moveUp(model.gridGS.grid)
+                    octopus.clearGrid()
+                    model.gridGS.grid = nextGrid
+                    view.renderGrid()
                     break
                 case 'ArrowRight':
                     nextGrid = octopus.moveRight(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
-                    console.log('Right result: ')
-                    console.log(model.gridGS.grid)
+                    // console.log('Right result: ')
+                    // console.log(model.gridGS.grid)
                     view.renderGrid()
                     break
                 case 'ArrowDown':
-                    // moveDown(gridStore)
+                    nextGrid = octopus.moveDown(model.gridGS.grid)
+                    octopus.clearGrid()
+                    model.gridGS.grid = nextGrid
+                    view.renderGrid()
                     break
             }
         },
@@ -183,6 +195,18 @@
                 reversedGrid.push(row.reverse())
             })
             return reversedGrid
+        },
+        moveUp: function(grid) {
+            let transposedGrid = model.transpose(grid)
+            transposedGrid = this.moveLeft(transposedGrid)
+            transposedGrid = model.transpose(transposedGrid)
+            return transposedGrid
+        },
+        moveDown: function(grid) {
+            let transposedGrid = model.transpose(grid)
+            transposedGrid = this.moveRight(transposedGrid)
+            transposedGrid = model.transpose(transposedGrid)
+            return transposedGrid
         }
     }
 
