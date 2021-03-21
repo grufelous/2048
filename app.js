@@ -35,6 +35,9 @@
             return newGrid
         },
         reverse: function(grid) {
+            /**
+             * TODO: find out the issue in this function
+             *  */
             let reversedGrid = [...grid]
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 2; j++) {
@@ -91,13 +94,7 @@
                 case 'ArrowLeft':
                     nextGrid = octopus.moveLeft(model.gridGS.grid)
                     octopus.clearGrid()
-                    // console.log('Left result: ')
-                    // console.log(nextGrid)
-                    // nextGrid = octopus.createNumber(nextGrid)
                     model.gridGS.grid = nextGrid
-                    // console.log('Final result: ')
-                    // console.log(nextGrid)
-                    // console.log(model.gridGS.grid)
                     view.renderGrid()
                     break
                 case 'ArrowUp':
@@ -110,8 +107,6 @@
                     nextGrid = octopus.moveRight(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
-                    // console.log('Right result: ')
-                    // console.log(model.gridGS.grid)
                     view.renderGrid()
                     break
                 case 'ArrowDown':
@@ -147,7 +142,6 @@
             let nums = []
             for(let i = 0; i < 4; i++) {
                 nums.push(model.cellValues[Math.floor(Math.random()*4)])
-                // console.log(nums[i])
                 grid = octopus.createNumber(grid, nums[i])
             }
             model.gridGS.grid = grid
