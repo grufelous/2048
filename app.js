@@ -24,7 +24,30 @@
                     this.ourGrid = newGrid
                 }
             }
-        })()
+        })(),
+        transpose: function(grid) {
+            let newGrid = this.emptyGrid()
+            for(let i = 0; i < 4; i++) {
+                for(let j = 0; j < 4; j++) {
+                    newGrid[j][i] = grid[i][j]
+                }
+            }
+            return newGrid
+        },
+        reverse: function(grid) {
+            /**
+             * TODO: find out the issue in this function
+             *  */
+            let reversedGrid = [...grid]
+            for(let i = 0; i < 4; i++) {
+                for(let j = 0; j < 2; j++) {
+                    const x = reversedGrid[i][3-j]
+                    reversedGrid[i][3-j] = reversedGrid[i][j]
+                    reversedGrid[i][j] = x
+                }
+            }
+            return reversedGrid
+        }
     }
 
     let view = {
@@ -71,31 +94,26 @@
                 case 'ArrowLeft':
                     nextGrid = octopus.moveLeft(model.gridGS.grid)
                     octopus.clearGrid()
-                    console.log('Left result: ')
-                    console.log(nextGrid)
-                    nextGrid = octopus.createNumber(nextGrid)
                     model.gridGS.grid = nextGrid
-                    console.log('Final result: ')
-                    console.log(nextGrid)
-                    console.log(model.gridGS.grid)
                     view.renderGrid()
                     break
                 case 'ArrowUp':
-                    // gridStore = moveUp(gridStore)
-                    // clearGrid()
-                    // createNumber(gridStore)
-                    // renderGrid(gridStore)
+                    nextGrid = octopus.moveUp(model.gridGS.grid)
+                    octopus.clearGrid()
+                    model.gridGS.grid = nextGrid
+                    view.renderGrid()
                     break
                 case 'ArrowRight':
                     nextGrid = octopus.moveRight(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
-                    console.log('Right result: ')
-                    console.log(model.gridGS.grid)
                     view.renderGrid()
                     break
                 case 'ArrowDown':
-                    // moveDown(gridStore)
+                    nextGrid = octopus.moveDown(model.gridGS.grid)
+                    octopus.clearGrid()
+                    model.gridGS.grid = nextGrid
+                    view.renderGrid()
                     break
             }
         },
@@ -124,7 +142,6 @@
             let nums = []
             for(let i = 0; i < 4; i++) {
                 nums.push(model.cellValues[Math.floor(Math.random()*4)])
-                // console.log(nums[i])
                 grid = octopus.createNumber(grid, nums[i])
             }
             model.gridGS.grid = grid
@@ -173,16 +190,77 @@
             console.log(newGrid)
             return newGrid
         },
+        moveLeftExperiment: function(grid) {
+            let newGrid = model.emptyGrid()
+            grid.forEach((row, rowIdx) => {
+                let newRow = newGrid[rowIdx]
+                let i = 0, j = 1, k = 0
+                while(i < 4 && j < 4 && k < 4) {
+                    while(i < 4 && row[i] === 0) {
+                        i++
+                        j = i+1
+                    }
+                    if(i === 4) {
+                        continue
+                    }
+                    while(j < 4 && row[j] === 0) {
+                        j++
+                    }
+                    if(j === 4 && k < 4) {
+                        newRow[k++] = row[i]
+                        continue
+                    }
+                    if(row[i] === row[j] && k < 4) {
+                        newRow[k++] = 2*row[i]
+                        row[i] = 0
+                        row[j] = 0
+                        i = j+1
+                        j = i+1
+                    } else if(row[i] !== row[j] && k < 4) {
+                        newRow[k++] = row[i]
+                        row[i] = 0
+                        i = j
+                        j = j+1
+                        if(j >= 4 && k < 4 && row[i] !== 0) {
+                            newRow[k++] = row[i]
+                        }
+                    }
+                }
+            })
+            console.log('New grid of new function: ')
+            console.log(newGrid)
+            return newGrid
+        },
         moveRight: function(grid) {
-            let reversedGrid = []
-            grid.forEach(row => {
-                reversedGrid.push(row.reverse())
-            })
+            let reversedGrid = [...grid]
+            for(let i = 0; i < 4; i++) {
+                for(let j = 0; j < 2; j++) {
+                    const x = reversedGrid[i][3-j]
+                    reversedGrid[i][3-j] = reversedGrid[i][j]
+                    reversedGrid[i][j] = x
+                }
+            }
             reversedGrid = octopus.moveLeft(reversedGrid)
-            reversedGrid.forEach(row => {
-                reversedGrid.push(row.reverse())
-            })
+            for(let i = 0; i < 4; i++) {
+                for(let j = 0; j < 2; j++) {
+                    const x = reversedGrid[i][3-j]
+                    reversedGrid[i][3-j] = reversedGrid[i][j]
+                    reversedGrid[i][j] = x
+                }
+            }
             return reversedGrid
+        },
+        moveUp: function(grid) {
+            let transposedGrid = model.transpose(grid)
+            transposedGrid = this.moveLeft(transposedGrid)
+            transposedGrid = model.transpose(transposedGrid)
+            return transposedGrid
+        },
+        moveDown: function(grid) {
+            let transposedGrid = model.transpose(grid)
+            transposedGrid = this.moveRight(transposedGrid)
+            transposedGrid = model.transpose(transposedGrid)
+            return transposedGrid
         }
     }
 
