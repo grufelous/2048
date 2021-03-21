@@ -92,7 +92,7 @@
             console.log(`Called on ${e.target}`)
             switch(e.key) {
                 case 'ArrowLeft':
-                    nextGrid = octopus.moveLeft(model.gridGS.grid)
+                    let nextGrid = octopus.moveLeft(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
                     view.renderGrid()
