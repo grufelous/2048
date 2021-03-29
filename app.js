@@ -6,7 +6,13 @@
             [0, 0, 0, 0],
             [0, 0, 0, 0],
         ],
-        score: 0,
+        _score: 0,
+        get score() {
+            return this._score
+        },
+        set score(value) {
+            this._score = value
+        },
         emptyGrid: function() {
             return [[0, 0, 0, 0],[0, 0, 0, 0],[0, 0, 0, 0],[0, 0, 0, 0],]
         },
@@ -54,12 +60,13 @@
         scoreDisplay: document.getElementById('score'),
         backGrid: document.getElementById('back-grid'),
         init: function() {
-            console.log('Grid store: ')
-            console.log(model.gridStore)
-            console.log('Grid getter/setter: ')
-            console.log(model.gridGS.grid)
+            // console.log('Grid store: ')
+            // console.log(model.gridStore)
+            // console.log('Grid getter/setter: ')
+            // console.log(model.gridGS.grid)
             document.getElementById('reset-btn').addEventListener('click', octopus.resetGrid)
-            document.getElementById('clear-btn').addEventListener('click', octopus.clearGrid)
+            // document.getElementById('clear-btn').addEventListener('click', octopus.clearGrid)
+            model.score = 0
         },
         clearDOMGrid: function() {
             // console.log('Clearing grid')
@@ -135,11 +142,17 @@
             grid[emptyPositions[chosen][0]][emptyPositions[chosen][1]] = number
             return grid
         },
+        setScore: function(newScore) {
+            model.score = newScore
+            document.getElementById('score').innerText = model.score
+        },
         resetGrid: function() {
             console.log('Resetting grid')
             octopus.clearGrid()
             console.log(model.gridGS.grid)
             let grid = model.emptyGrid()
+            // ? Why `octopus` here instead of `this`? Because this function is bound to a button before execution and creation of namespace
+            octopus.setScore(0)
             let nums = []
             for(let i = 0; i < 4; i++) {
                 nums.push(model.cellValues[Math.floor(Math.random()*4)])
@@ -171,7 +184,8 @@
                     // console.log(`F: ${first} S: ${second}`)
                     if(first === second) {
                         gridRow.push(first*2)
-                        // updateScore(first*2)
+                        // ? Why `this` here instead of `octopus`? Because the function has now executed
+                        this.setScore(model.score + 2*first)
                         intermediateGridRow.shift()
                     } else {
                         gridRow.push(first)
