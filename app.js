@@ -44,7 +44,7 @@
             /**
              * TODO: find out the issue in this function
              *  */
-            let reversedGrid = [...grid]
+            let reversedGrid = JSON.parse(JSON.stringify(grid))
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 2; j++) {
                     const x = reversedGrid[i][3-j]
@@ -97,35 +97,42 @@
         keyHandler: function(e) {
             console.log(e.key)
             console.log(`Called on ${e.target}`)
+            if(!octopus.canMove(model.gridGS.grid)) {
+                return
+            }
             let nextGrid = model.emptyGrid()
+            const curGrid = model.gridGS.grid
             switch(e.key) {
                 case 'ArrowLeft':
                     nextGrid = octopus.moveLeft(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
+                    model.gridGS.grid = (model.gridGS.grid!==curGrid) ? octopus.createNumber(model.gridGS.grid) : curGrid
                     view.renderGrid()
                     break
                 case 'ArrowUp':
                     nextGrid = octopus.moveUp(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
+                    model.gridGS.grid = (model.gridGS.grid!==curGrid) ? octopus.createNumber(model.gridGS.grid) : curGrid
                     view.renderGrid()
                     break
                 case 'ArrowRight':
                     nextGrid = octopus.moveRight(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
+                    model.gridGS.grid = (model.gridGS.grid!==curGrid) ? octopus.createNumber(model.gridGS.grid) : curGrid
                     view.renderGrid()
                     break
                 case 'ArrowDown':
                     nextGrid = octopus.moveDown(model.gridGS.grid)
                     octopus.clearGrid()
                     model.gridGS.grid = nextGrid
+                    model.gridGS.grid = (model.gridGS.grid!==curGrid) ? octopus.createNumber(model.gridGS.grid) : curGrid
                     view.renderGrid()
                     break
             }
         },
-        
     }
 
     let octopus = {
@@ -138,9 +145,34 @@
                     }
                 }
             }
+            if(emptyPositions.length === 0)
+                return grid
             let chosen = Math.floor(Math.random()*emptyPositions.length)
             grid[emptyPositions[chosen][0]][emptyPositions[chosen][1]] = number
             return grid
+        },
+        canMove: function(originalGrid) {
+            const grid = JSON.parse(JSON.stringify(originalGrid))
+            // console.log('Original: ')
+            // console.log(grid)
+            // console.log('Left: ')
+            // const leftG = octopus.moveLeft(grid)
+            // console.log(leftG)
+            // console.log('Up: ')
+            // const upG = octopus.moveUp(grid)
+            // console.log(upG)
+            // console.log('Right: ')
+            // const rightG = octopus.moveRight(grid)
+            // console.log(rightG)
+            // console.log('Down: ')
+            // const downG = octopus.moveDown(grid)
+            // console.log(downG)
+            if(grid === this.moveDown(grid) && grid === this.moveLeft(grid) && grid === this.moveRight(grid) && grid === this.moveUp(grid)) {
+                console.log('Cant move!')
+                return false
+            }
+            console.log('Can move')
+            return true
         },
         setScore: function(newScore) {
             model.score = newScore
@@ -154,8 +186,8 @@
             // ? Why `octopus` here instead of `this`? Because this function is bound to a button before execution and creation of namespace
             octopus.setScore(0)
             let nums = []
-            for(let i = 0; i < 4; i++) {
-                nums.push(model.cellValues[Math.floor(Math.random()*4)])
+            for(let i = 0; i < 16; i++) {
+                nums.push(model.cellValues[Math.floor(Math.random()*11)])
                 grid = octopus.createNumber(grid, nums[i])
             }
             model.gridGS.grid = grid
@@ -169,7 +201,7 @@
         moveLeft: function(grid) {
             let newGrid = []
             for(let i = 0; i < 4; i++) {
-                console.log(`For i = ${i}`)
+                // console.log(`For i = ${i}`)
                 let intermediateGridRow = [], gridRow = []
                 for(let j = 0; j < 4; j++) {
                     if(grid[i][j] !== 0) {
@@ -177,7 +209,7 @@
                         intermediateGridRow.push(grid[i][j])
                     }
                 }
-                console.log(`IGR: ${intermediateGridRow}, sz: ${intermediateGridRow.length}`)
+                // console.log(`IGR: ${intermediateGridRow}, sz: ${intermediateGridRow.length}`)
                 while(intermediateGridRow.length > 1) {
                     let first = intermediateGridRow.shift()
                     let second = intermediateGridRow[0]
@@ -196,13 +228,13 @@
                     gridRow.push(intermediateGridRow[0])
                     intermediateGridRow.shift()
                 }
-                console.log(`Length of row: ${gridRow.length}, gridRow: ${gridRow}`)
+                // console.log(`Length of row: ${gridRow.length}, gridRow: ${gridRow}`)
                 while(gridRow.length < 4)
                     gridRow.push(0)
                 newGrid.push(gridRow)
-                console.log(`\n\n`)
+                // console.log(`\n\n`)
             }
-            console.log(newGrid)
+            // console.log(newGrid)
             return newGrid
         },
         moveLeftExperiment: function(grid) {
@@ -247,7 +279,7 @@
             return newGrid
         },
         moveRight: function(grid) {
-            let reversedGrid = [...grid]
+            let reversedGrid = JSON.parse(JSON.stringify(grid))
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 2; j++) {
                     const x = reversedGrid[i][3-j]
