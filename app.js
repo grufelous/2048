@@ -41,9 +41,6 @@
             return newGrid
         },
         reverse: function(grid) {
-            /**
-             * TODO: find out the issue in this function
-             *  */
             let reversedGrid = JSON.parse(JSON.stringify(grid))
             for(let i = 0; i < 4; i++) {
                 for(let j = 0; j < 2; j++) {
@@ -279,22 +276,9 @@
             return newGrid
         },
         moveRight: function(grid) {
-            let reversedGrid = JSON.parse(JSON.stringify(grid))
-            for(let i = 0; i < 4; i++) {
-                for(let j = 0; j < 2; j++) {
-                    const x = reversedGrid[i][3-j]
-                    reversedGrid[i][3-j] = reversedGrid[i][j]
-                    reversedGrid[i][j] = x
-                }
-            }
+            let reversedGrid = model.reverse(grid)
             reversedGrid = octopus.moveLeft(reversedGrid)
-            for(let i = 0; i < 4; i++) {
-                for(let j = 0; j < 2; j++) {
-                    const x = reversedGrid[i][3-j]
-                    reversedGrid[i][3-j] = reversedGrid[i][j]
-                    reversedGrid[i][j] = x
-                }
-            }
+            reversedGrid = model.reverse(reversedGrid)
             return reversedGrid
         },
         moveUp: function(grid) {
