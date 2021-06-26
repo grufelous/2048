@@ -83,7 +83,7 @@
                         const curId = String.fromCharCode('A'.charCodeAt(0) + 4*i + j)
                         console.log(`${curId} for ${i} ${j}`)
                         const newGridCell = document.createElement('div')
-                        newGridCell.className = `grid-cell c-${grid[i][j]}`
+                        newGridCell.className = `grid-cell c-${grid[i][j]}`         //2 4 8 0, i = 0, j = 1
                         newGridCell.id = `${curId}`
                         newGridCell.innerText = grid[i][j]
                         view.backGrid.appendChild(newGridCell)
@@ -95,6 +95,7 @@
             console.log(e.key)
             console.log(`Called on ${e.target}`)
             if(!octopus.canMove(model.gridGS.grid)) {
+                alert('Game over')
                 return
             }
             let nextGrid = model.emptyGrid()
@@ -298,4 +299,31 @@
     view.init()
     
     document.addEventListener('keydown', view.keyHandler)
-})()
+})();
+
+
+
+/***
+ * original     //left          //right
+ * 2 2 4 0      4 4 0 0         0 0 4 4                 2 2 4
+ * 2 0 0 2       40 0 0         0 0 0 4                 2 2
+ * 0 2 4 8      2 4 8 0         0 2 4 8                 2 4 8
+ * 2 2 2 2
+ * 
+ * 2 2 2 0
+ * 
+ * 2 2 4 0  -reverse->  0 4 2 2  -left->   4 4 0 0 -reverse-> 0 0 4 4
+ * 0 2 4 8  -reverse->  8 4 2 0  -left->   8 4 2 0 -reverse-> 0 2 4 8
+ * 
+ *              //up 
+ * 2 2 4 0      4 4 8 2         0 0 4 4
+ * 2 0 0 2      2 2 2 8         0 0 0 4
+ * 0 2 4 8      0 0 0 2         0 2 4 8
+ * 2 2 2 2      0 0 0 0
+ * 
+ * transpose    //left      //transpose
+ * 2 2 0 2      4 2 0 0     4 4 8 2
+ * 2 0 2 2      4 2 0 0     2 2 2 8
+ * 4 0 4 2      8 2 0 0     0 0 0 2
+ * 0 2 8 2      2 8 2 0     0 0 0 0
+ */
